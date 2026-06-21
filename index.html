@@ -2,293 +2,268 @@
 <html lang="zh-HK">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
-    <title>軟式曲棍球 · 聲控電子牌</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>軟式曲棍球電子牌 - 聲控比分</title>
     <style>
         * {
             box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+            user-select: none; /* 避免點擊時選取文字 */
         }
-
         body {
-            font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
-            background: linear-gradient(145deg, #0b1a2e 0%, #1a2f44 100%);
+            margin: 0;
             min-height: 100vh;
+            background: radial-gradient(circle at 20% 30%, #1a2a3a, #0b1219);
+            font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 16px;
-            margin: 0;
         }
-
         .scoreboard {
-            max-width: 780px;
+            max-width: 800px;
             width: 100%;
-            background: #1f3a4b;
-            background-image: radial-gradient(circle at 20% 30%, #2d4b5e, #142b39);
-            border-radius: 72px 72px 48px 48px;
-            padding: 32px 24px 40px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.7), 0 0 0 2px #7fa9b9 inset, 0 0 0 4px #3e5f6f inset;
-            transition: all 0.2s;
-            border: 1px solid #8bb3c4;
+            background: rgba(10, 20, 30, 0.75);
+            backdrop-filter: blur(4px);
+            border-radius: 80px 80px 60px 60px;
+            padding: 30px 20px 40px;
+            box-shadow: 0 30px 40px rgba(0,0,0,0.7), 0 0 0 2px #3c5a7a inset, 0 0 0 4px #1c2e40 inset;
+            border: 1px solid #6a8db0;
+            transition: all 0.1s;
         }
-
-        /* 隊伍名稱及分數區域 */
+        h1 {
+            text-align: center;
+            color: #d0e4ff;
+            font-weight: 400;
+            letter-spacing: 6px;
+            text-shadow: 0 2px 0 #0a1a2a, 0 0 12px #3f7bb0;
+            margin: -8px 0 12px 0;
+            font-size: 1.6rem;
+            word-break: keep-all;
+        }
         .teams {
             display: flex;
-            justify-content: space-between;
+            flex-direction: row;
+            justify-content: space-evenly;
+            align-items: stretch;
             gap: 12px;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
+            margin: 12px 0 6px;
         }
-
         .team {
             flex: 1;
-            min-width: 140px;
-            background: rgba(0, 0, 0, 0.35);
-            backdrop-filter: blur(2px);
-            border-radius: 60px;
-            padding: 20px 12px 24px;
-            box-shadow: 0 8px 0 #0b1a1f, 0 10px 20px rgba(0,0,0,0.5);
-            border-bottom: 3px solid #f5c542;
-            text-align: center;
-            transition: 0.15s;
+            background: #142433;
+            border-radius: 60px 60px 40px 40px;
+            padding: 14px 6px 18px;
+            box-shadow: inset 0 -8px 0 #0a1622, 0 10px 18px rgba(0,0,0,0.5);
+            border-bottom: 3px solid #3f7bb0;
+            transition: transform 0.1s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-
-        .team.away {
-            border-bottom-color: #6fc2e6;
-        }
-
         .team-name {
-            font-size: 1.8rem;
-            font-weight: 700;
-            letter-spacing: 1px;
-            color: #f2f9ff;
-            text-shadow: 0 3px 0 #0f212b, 0 5px 12px #00000066;
-            margin-bottom: 12px;
-            word-break: break-word;
-        }
-
-        .score {
-            font-size: 6.2rem;
-            font-weight: 800;
-            line-height: 1;
-            color: #fff8e7;
-            text-shadow: 0 4px 0 #3a281c, 0 8px 20px #00000099;
-            background: #0f212e;
-            padding: 6px 10px;
-            border-radius: 40px;
-            display: inline-block;
-            min-width: 120px;
-            letter-spacing: 4px;
-            box-shadow: inset 0 -6px 0 #2e4a57, 0 6px 0 #0b141c;
-            margin-bottom: 16px;
-            font-variant-numeric: tabular-nums;
-        }
-
-        .score-controls {
-            display: flex;
-            justify-content: center;
-            gap: 14px;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            background: #e9f0f5;
-            border: none;
-            border-radius: 48px;
-            padding: 14px 20px;
-            min-width: 72px;
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: #1d3543;
-            box-shadow: 0 6px 0 #6a7f8a, 0 10px 18px #00000055;
-            cursor: pointer;
-            transition: all 0.06s linear;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            letter-spacing: 1px;
-            border: 1px solid #bfd9e6;
-            touch-action: manipulation;
-            flex: 1 1 auto;
-        }
-
-        .btn:active {
-            transform: translateY(6px);
-            box-shadow: 0 1px 0 #4d626e;
-        }
-
-        .btn.plus {
-            background: #b3e0b0;
-            box-shadow: 0 6px 0 #40834a;
-            color: #16331b;
-        }
-
-        .btn.minus {
-            background: #f8b5b5;
-            box-shadow: 0 6px 0 #a34848;
-            color: #4d1a1a;
-        }
-
-        .btn.reset {
-            background: #d3dbe0;
-            box-shadow: 0 6px 0 #6b7b84;
-            font-size: 1.6rem;
-            padding: 14px 18px;
-            min-width: 60px;
-        }
-
-        .btn.speak {
-            background: #d4c9f0;
-            box-shadow: 0 6px 0 #73668f;
-            color: #281f3d;
-            font-size: 1.7rem;
-            padding: 14px 24px;
-            min-width: 110px;
-        }
-
-        .action-bar {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 16px;
-            margin: 20px 0 12px;
-        }
-
-        .global-reset {
-            background: #2f4050;
-            box-shadow: 0 6px 0 #131f28;
-            color: #f0f7fc;
-            border: 1px solid #608194;
-            padding: 12px 28px;
-            font-size: 1.6rem;
-            border-radius: 60px;
-            flex: 0 1 auto;
-        }
-
-        .status-area {
-            background: #0e1f2bcc;
-            backdrop-filter: blur(4px);
-            border-radius: 80px;
-            padding: 16px 24px;
-            margin-top: 22px;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: center;
-            gap: 14px 24px;
-            border: 1px solid #5c869b;
-            box-shadow: inset 0 2px 6px #00000066;
-        }
-
-        .readout {
+            color: #bdd6f0;
             font-size: 1.8rem;
             font-weight: 600;
-            color: #daf0ff;
-            background: #142f3d;
-            padding: 6px 28px;
-            border-radius: 60px;
             letter-spacing: 2px;
-            box-shadow: inset 0 -3px 0 #3e6579;
-            font-variant-numeric: tabular-nums;
-            display: inline-block;
+            text-shadow: 0 2px 0 #0d1b2b;
+            margin-bottom: 6px;
         }
-
-        .readout span {
-            color: #ffd966;
-            margin: 0 6px;
+        .score-container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 6px 0 4px;
         }
-
-        .voice-indicator {
-            color: #a0d0e0;
-            font-size: 1.6rem;
-            background: #1b3545;
-            padding: 6px 24px;
-            border-radius: 50px;
-            border-left: 4px solid #b9d8e8;
+        .score-btn {
+            background: #1d3147;
+            border: none;
+            border-radius: 40px;
+            color: #f0f9ff;
+            font-size: 3.2rem;
+            font-weight: 700;
+            width: 80px;
+            height: 80px;
+            line-height: 1;
+            box-shadow: 0 6px 0 #0b1727, 0 8px 16px rgba(0,0,0,0.6);
+            transition: all 0.04s linear;
+            cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 6px;
+            justify-content: center;
+            text-shadow: 0 2px 0 #0a1a2a;
+            touch-action: manipulation;
+            border: 1px solid #3b6a8f;
         }
-
-        .voice-indicator i {
-            font-style: normal;
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            background: #6fc2e6;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #6fc2e6aa;
-            animation: pulse 1.8s infinite;
+        .score-btn:active {
+            transform: translateY(6px);
+            box-shadow: 0 1px 0 #0b1727, 0 6px 12px rgba(0,0,0,0.6);
         }
-
-        @keyframes pulse {
-            0% { opacity: 0.3; transform: scale(0.9); }
-            50% { opacity: 1; transform: scale(1.2); }
-            100% { opacity: 0.3; transform: scale(0.9); }
+        .score-btn.minus {
+            background: #2f1f2a;
+            border-color: #7a4a5a;
+            color: #ffc9d9;
+            box-shadow: 0 6px 0 #1e121b, 0 8px 16px rgba(0,0,0,0.6);
         }
-
-        .footnote {
+        .score-number {
+            font-size: 4.8rem;
+            font-weight: 700;
+            min-width: 80px;
             text-align: center;
-            margin-top: 20px;
-            color: #7799aa;
-            font-size: 0.9rem;
-            letter-spacing: 0.8px;
-            opacity: 0.8;
+            color: #ffffff;
+            text-shadow: 0 0 20px #6aafee, 0 4px 0 #0e1f30;
+            letter-spacing: 2px;
+            background: #0c1a28;
+            padding: 0 8px;
+            border-radius: 30px;
+            line-height: 1.3;
+            border: 1px solid #3f74a0;
         }
-
-        @media (max-width: 580px) {
-            .scoreboard { padding: 20px 14px; }
-            .team { padding: 16px 6px; }
-            .score { font-size: 4.6rem; min-width: 80px; }
-            .btn { font-size: 1.8rem; padding: 12px 12px; min-width: 56px; }
+        .vs-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
+            font-size: 1.2rem;
+            color: #8ab3d9;
+            font-weight: 300;
+        }
+        .vs-badge {
+            background: #1d3147;
+            border-radius: 40px;
+            padding: 6px 12px;
+            font-weight: 700;
+            color: #c0daf5;
+            border: 1px solid #4b7a9f;
+            box-shadow: inset 0 0 8px #1f3f5a;
+            font-size: 1.2rem;
+        }
+        .control-bar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 18px;
+            margin-top: 28px;
+            flex-wrap: wrap;
+        }
+        .action-btn {
+            background: #1f334a;
+            border: none;
+            border-radius: 100px;
+            padding: 14px 26px;
+            color: #ebf5ff;
+            font-size: 1.4rem;
+            font-weight: 500;
+            box-shadow: 0 6px 0 #0f1e2e, 0 8px 16px rgba(0,0,0,0.5);
+            transition: 0.04s linear;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid #4d7a9e;
+            touch-action: manipulation;
+            letter-spacing: 2px;
+        }
+        .action-btn:active {
+            transform: translateY(6px);
+            box-shadow: 0 1px 0 #0f1e2e, 0 6px 12px rgba(0,0,0,0.5);
+        }
+        .action-btn.speak {
+            background: #2a4d5a;
+            border-color: #5d9bb0;
+            box-shadow: 0 6px 0 #1a3340, 0 8px 16px rgba(0,0,0,0.5);
+        }
+        .action-btn.reset {
+            background: #4a2f3a;
+            border-color: #8f5a6a;
+            box-shadow: 0 6px 0 #2f1d26, 0 8px 16px rgba(0,0,0,0.5);
+        }
+        .footer {
+            margin-top: 30px;
+            color: #5f7f9a;
+            text-align: center;
+            font-size: 0.9rem;
+            border-top: 1px solid #2b4a60;
+            padding-top: 16px;
+            letter-spacing: 1px;
+        }
+        @media (max-width: 600px) {
+            .scoreboard { padding: 20px 10px 30px; border-radius: 50px; }
             .team-name { font-size: 1.4rem; }
-            .readout { font-size: 1.4rem; padding: 4px 16px; }
+            .score-btn { width: 64px; height: 64px; font-size: 2.6rem; }
+            .score-number { font-size: 3.6rem; min-width: 60px; }
+            .vs-badge { font-size: 1rem; padding: 4px 10px; }
+            .action-btn { padding: 10px 18px; font-size: 1.0rem; }
+        }
+        @media (max-width: 420px) {
+            .score-btn { width: 54px; height: 54px; font-size: 2.2rem; }
+            .score-number { font-size: 2.8rem; min-width: 50px; }
+            .team-name { font-size: 1.2rem; }
+        }
+        /* 讀出狀態提示 */
+        .speech-indicator {
+            color: #b3d9f0;
+            background: #1a3349;
+            border-radius: 40px;
+            padding: 6px 18px;
+            font-size: 0.9rem;
+            border: 1px solid #3d7a9a;
+            box-shadow: inset 0 0 10px #17334a;
+            display: inline-block;
+        }
+        .flex-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
         }
     </style>
 </head>
 <body>
-    <div class="scoreboard" role="main" aria-label="軟式曲棍球電子計分牌">
-        <!-- 兩隊 -->
+    <div class="scoreboard" role="main">
+        <h1>🏑 軟式曲棍球</h1>
         <div class="teams">
             <!-- 主隊 -->
-            <div class="team home">
-                <div class="team-name" id="homeTeamName">🏒 主隊</div>
-                <div class="score" id="homeScore">0</div>
-                <div class="score-controls">
-                    <button class="btn plus" data-team="home" data-delta="1" aria-label="主隊加一分">➕</button>
-                    <button class="btn minus" data-team="home" data-delta="-1" aria-label="主隊減一分">➖</button>
+            <div class="team" id="teamA">
+                <div class="team-name">🟦 主隊</div>
+                <div class="score-container">
+                    <button class="score-btn minus" data-team="A" data-delta="-1" aria-label="主隊減1分">−</button>
+                    <div class="score-number" id="scoreA">0</div>
+                    <button class="score-btn" data-team="A" data-delta="1" aria-label="主隊加1分">+</button>
                 </div>
+            </div>
+            <!-- VS 分隔 -->
+            <div class="vs-section">
+                <div class="vs-badge">⚡ VS</div>
+                <div style="font-size:0.9rem; margin-top:4px; color:#759bbd;">比</div>
             </div>
             <!-- 客隊 -->
-            <div class="team away">
-                <div class="team-name" id="awayTeamName">🏒 客隊</div>
-                <div class="score" id="awayScore">0</div>
-                <div class="score-controls">
-                    <button class="btn plus" data-team="away" data-delta="1" aria-label="客隊加一分">➕</button>
-                    <button class="btn minus" data-team="away" data-delta="-1" aria-label="客隊減一分">➖</button>
+            <div class="team" id="teamB">
+                <div class="team-name">🟥 客隊</div>
+                <div class="score-container">
+                    <button class="score-btn minus" data-team="B" data-delta="-1" aria-label="客隊減1分">−</button>
+                    <div class="score-number" id="scoreB">0</div>
+                    <button class="score-btn" data-team="B" data-delta="1" aria-label="客隊加1分">+</button>
                 </div>
             </div>
         </div>
 
-        <!-- 額外控制：重設及讀出分數 -->
-        <div class="action-bar">
-            <button class="btn speak" id="speakScoreBtn" aria-label="以語音讀出目前比數">🔊 讀出比數</button>
-            <button class="btn global-reset" id="resetAllBtn" aria-label="重設兩隊分數為零">⟲ 重設</button>
+        <!-- 控制列 + 聲控模式 -->
+        <div class="control-bar">
+            <div class="flex-row">
+                <button class="action-btn speak" id="speakBtn" aria-label="讀出比分（聲控模式）">🔊 讀出比分</button>
+                <button class="action-btn reset" id="resetBtn" aria-label="重設比分">↺ 重設</button>
+            </div>
+            <div class="speech-indicator" id="speechStatus">🔈 點擊「讀出比分」</div>
         </div>
 
-        <!-- 狀態列：即時顯示「比」 及 聲控狀態 -->
-        <div class="status-area">
-            <div class="readout" id="scoreReadout">
-                <span id="homeReadout">0</span> 比 <span id="awayReadout">0</span>
-            </div>
-            <div class="voice-indicator" id="voiceIndicator">
-                <i></i> 聲控就緒
-            </div>
+        <!-- 額外說明：按分數加減，聲控讀出「比」 -->
+        <div class="footer">
+            <span>⚡ 直接點擊分數數字加減 &nbsp;·&nbsp; 語音讀出「<strong>X 比 Y</strong>」</span>
         </div>
-        <div class="footnote">按➕/➖ 加分或減分 · 點擊「讀出比數」聽取分數</div>
     </div>
 
     <script>
@@ -296,201 +271,162 @@
             "use strict";
 
             // DOM 元素
-            const homeScoreEl = document.getElementById('homeScore');
-            const awayScoreEl = document.getElementById('awayScore');
-            const homeReadoutEl = document.getElementById('homeReadout');
-            const awayReadoutEl = document.getElementById('awayReadout');
-            const speakBtn = document.getElementById('speakScoreBtn');
-            const resetBtn = document.getElementById('resetAllBtn');
+            const scoreElA = document.getElementById('scoreA');
+            const scoreElB = document.getElementById('scoreB');
+            const speechStatus = document.getElementById('speechStatus');
 
-            // 分數狀態 (數字)
-            let homeScore = 0;
-            let awayScore = 0;
+            // 分數狀態 (內部)
+            let scoreA = 0;
+            let scoreB = 0;
 
-            // 語音合成支援檢查
-            const speechSupported = 'speechSynthesis' in window && window.speechSynthesis;
+            // 語音合成支援
+            const synth = window.speechSynthesis;
+            let utterance = null;
+            let speechSupported = ('speechSynthesis' in window);
 
-            // 更新所有顯示 (數字、讀出區)
+            // 更新顯示
             function updateDisplay() {
-                homeScoreEl.textContent = homeScore;
-                awayScoreEl.textContent = awayScore;
-                homeReadoutEl.textContent = homeScore;
-                awayReadoutEl.textContent = awayScore;
+                scoreElA.textContent = scoreA;
+                scoreElB.textContent = scoreB;
             }
 
-            // 語音讀出「X 比 Y」 (X: 主隊, Y: 客隊)
-            function speakScore() {
-                if (!speechSupported) {
-                    alert('你的瀏覽器不支援語音合成，請使用 Chrome / Edge / Safari 等現代瀏覽器。');
+            // 核心：加分/減分 (delta: +1 或 -1)
+            function adjustScore(team, delta) {
+                if (team === 'A') {
+                    const newVal = scoreA + delta;
+                    if (newVal < 0) {
+                        // 不低於0 (但可以保持0)
+                        if (scoreA === 0) return;
+                        scoreA = 0;
+                    } else {
+                        scoreA = newVal;
+                    }
+                } else if (team === 'B') {
+                    const newVal = scoreB + delta;
+                    if (newVal < 0) {
+                        if (scoreB === 0) return;
+                        scoreB = 0;
+                    } else {
+                        scoreB = newVal;
+                    }
+                } else {
                     return;
                 }
+                updateDisplay();
+                // 每次分數變動後，自動讀出比分 (聲控模式)
+                speakScore('auto');
+            }
 
-                // 取消任何正在播放的語音 (避免干擾)
-                window.speechSynthesis.cancel();
+            // 讀出比分 : 讀出「X 比 Y」 (例如 7 比 3)
+            function speakScore(trigger = 'manual') {
+                if (!speechSupported) {
+                    speechStatus.textContent = '⚠️ 瀏覽器不支援語音';
+                    return;
+                }
+                // 取消任何正在進行的語音
+                if (synth.speaking) {
+                    synth.cancel();
+                }
 
-                const text = `${homeScore} 比 ${awayScore}`;
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = 'zh-HK';          // 香港粵語/中文
-                utterance.rate = 0.92;
-                utterance.pitch = 1.0;
+                const text = `${scoreA} 比 ${scoreB}`;
+                utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'zh-HK';  // 粵語/中文
+                utterance.rate = 0.9;
+                utterance.pitch = 1.1;
                 utterance.volume = 1;
 
-                // 可選：更自然的語音 (若存在)
-                const voices = window.speechSynthesis.getVoices();
-                const zhVoice = voices.find(v => v.lang.startsWith('zh') || v.lang.startsWith('yue'));
-                if (zhVoice) utterance.voice = zhVoice;
-
-                // 讀出時視覺提示
-                const indicator = document.getElementById('voiceIndicator');
-                if (indicator) {
-                    indicator.innerHTML = '<i></i> 🔊 讀出中...';
-                    setTimeout(() => {
-                        indicator.innerHTML = '<i></i> 聲控就緒';
-                    }, 1500);
-                }
-
-                window.speechSynthesis.speak(utterance);
-
-                // 處理錯誤 (例如語音被阻擋)
-                utterance.onerror = function(e) {
-                    console.warn('語音錯誤:', e);
-                    if (indicator) indicator.innerHTML = '<i></i> 聲控就緒';
-                };
-            }
-
-            // 修改分數 (delta: +1 或 -1)
-            function changeScore(team, delta) {
-                if (team !== 'home' && team !== 'away') return;
-
-                // 確保 delta 是整數 1 或 -1 (安全)
-                const change = (delta === 1) ? 1 : (delta === -1) ? -1 : 0;
-                if (change === 0) return;
-
-                if (team === 'home') {
-                    const newVal = homeScore + change;
-                    if (newVal < 0) {
-                        // 不允許負分，但可提示（保持0）
-                        homeScore = 0;
-                    } else {
-                        homeScore = newVal;
-                    }
-                } else { // away
-                    const newVal = awayScore + change;
-                    if (newVal < 0) {
-                        awayScore = 0;
-                    } else {
-                        awayScore = newVal;
-                    }
-                }
-
-                // 更新畫面
-                updateDisplay();
-
-                // 加分/減分後自動讀出分數 (聲控模式)
-                // 但為了避免太頻繁，用微延遲讓點擊手感順暢，但讀出功能依然執行。
-                // 這裡我們直接呼叫讀出，讓使用者得到即時反饋。
-                // 但若連續快速點擊，會取消前一個語音再讀新的，符合直覺。
-                if (speechSupported) {
-                    // 取消正在讀的，立刻讀新的
-                    window.speechSynthesis.cancel();
-                    speakScore();
+                // 狀態提示
+                if (trigger === 'manual') {
+                    speechStatus.textContent = `🔊 讀出: 「${text}」`;
                 } else {
-                    // 不支援語音時，單純更新顯示
+                    speechStatus.textContent = `🔊 自動讀出: 「${text}」`;
                 }
+
+                utterance.onstart = function() {
+                    // 可選: 增加視覺回饋
+                };
+                utterance.onend = function() {
+                    speechStatus.textContent = `✅ 已讀出: 「${text}」`;
+                };
+                utterance.onerror = function(e) {
+                    speechStatus.textContent = `❌ 語音錯誤: ${e.error || '未知'}`;
+                };
+
+                synth.speak(utterance);
             }
 
-            // 重設分數
-            function resetScores() {
-                homeScore = 0;
-                awayScore = 0;
+            // 重置分數
+            function resetScore() {
+                if (synth && synth.speaking) synth.cancel();
+                scoreA = 0;
+                scoreB = 0;
                 updateDisplay();
-
-                // 重設後可選擇讀出「0 比 0」或者靜默。這裡讀出讓用家知道已歸零。
-                if (speechSupported) {
-                    window.speechSynthesis.cancel();
-                    speakScore();
-                }
+                speechStatus.textContent = '🔄 分數已重設';
+                // 重設後讀出 0 比 0
+                speakScore('auto');
             }
 
-            // 綁定按鈕事件 (使用事件代理)
-            function setupEventListeners() {
-                // 所有按鈕統一用代理監聽 (加分/減分)
-                document.querySelector('.scoreboard').addEventListener('click', function(e) {
-                    const target = e.target.closest('button');
-                    if (!target) return;
-
-                    // 處理加分/減分按鈕 (data-team, data-delta)
-                    const team = target.dataset.team;
-                    const deltaStr = target.dataset.delta;
-                    if (team && deltaStr) {
-                        const delta = parseInt(deltaStr, 10);
-                        if (!isNaN(delta) && (delta === 1 || delta === -1)) {
-                            changeScore(team, delta);
-                            e.preventDefault();
-                        }
-                        return;
-                    }
-
-                    // 讀出比數按鈕
-                    if (target.id === 'speakScoreBtn') {
-                        if (speechSupported) {
-                            window.speechSynthesis.cancel();
-                            speakScore();
-                        } else {
-                            alert('語音功能不支援，請更新瀏覽器。');
-                        }
-                        e.preventDefault();
-                        return;
-                    }
-
-                    // 重設按鈕
-                    if (target.id === 'resetAllBtn') {
-                        resetScores();
-                        e.preventDefault();
-                        return;
-                    }
-                });
-
-                // 避免觸控時雙擊選取文字
-                document.querySelectorAll('button').forEach(btn => {
-                    btn.addEventListener('mousedown', (e) => e.preventDefault());
-                });
-
-                // 確保語音合成voices加載後更新 (部分瀏覽器非同步)
-                if (speechSupported) {
-                    window.speechSynthesis.onvoiceschanged = () => {
-                        // 可選：預先載入語音
-                        window.speechSynthesis.getVoices();
-                    };
+            // ---------- 事件綁定 (按鈕) ----------
+            // 使用事件代理 (捕獲所有 .score-btn)
+            document.querySelector('.teams').addEventListener('click', function(e) {
+                const btn = e.target.closest('.score-btn');
+                if (!btn) return;
+                const team = btn.getAttribute('data-team');
+                const delta = parseInt(btn.getAttribute('data-delta'), 10);
+                if (team && !isNaN(delta)) {
+                    e.stopPropagation();
+                    adjustScore(team, delta);
                 }
-            }
+            });
+
+            // 讀出比分按鈕 (手動觸發)
+            document.getElementById('speakBtn').addEventListener('click', function(e) {
+                e.stopPropagation();
+                speakScore('manual');
+            });
+
+            // 重設按鈕
+            document.getElementById('resetBtn').addEventListener('click', function(e) {
+                e.stopPropagation();
+                resetScore();
+            });
+
+            // 鍵盤快捷鍵 (加分/減分) : 可選，但保留使用體驗
+            // 1: 主隊+1, 2: 主隊-1, 3: 客隊+1, 4: 客隊-1 (只做為輔助)
+            document.addEventListener('keydown', function(e) {
+                const key = e.key;
+                // 避免干擾輸入框等
+                if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+                // 數字鍵盤或主鍵盤數字
+                if (key === '1') { adjustScore('A', 1); e.preventDefault(); }
+                else if (key === '2') { adjustScore('A', -1); e.preventDefault(); }
+                else if (key === '3') { adjustScore('B', 1); e.preventDefault(); }
+                else if (key === '4') { adjustScore('B', -1); e.preventDefault(); }
+                else if (key === '0' || key === 'r') { resetScore(); e.preventDefault(); }
+                else if (key === 's' || key === 'S') { speakScore('manual'); e.preventDefault(); }
+            });
 
             // 初始化顯示
-            function init() {
-                updateDisplay();
+            updateDisplay();
 
-                // 若支援語音，顯示就緒；否則顯示提示
-                const indicator = document.getElementById('voiceIndicator');
-                if (!speechSupported && indicator) {
-                    indicator.innerHTML = '⚠️ 語音不支援';
-                    indicator.style.borderLeftColor = '#d98c8c';
-                } else if (indicator) {
-                    indicator.innerHTML = '<i></i> 聲控就緒';
-                }
+            // 初次載入時讀出一次比分 (讓用家知道功能)
+            window.addEventListener('load', function() {
+                setTimeout(() => {
+                    if (speechSupported) {
+                        speakScore('auto');
+                    } else {
+                        speechStatus.textContent = '⚠️ 語音不支援，請使用 Chrome / Edge / Safari';
+                    }
+                }, 500);
+            });
 
-                setupEventListeners();
-
-                // 初次載入時，讀出一次分數 (可選)
-                // 但可能造成干擾，故不自動讀取。使用者可點擊按鈕。
-                console.log('軟式曲棍球電子牌已啟動，按「讀出比數」或加減分會自動讀出。');
+            // 若語音支援但不發聲，提示
+            if (!speechSupported) {
+                speechStatus.textContent = '⚠️ 此瀏覽器不支援語音合成';
             }
 
-            // 啟動
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', init);
-            } else {
-                init();
-            }
+            // 增加額外觸覺回饋 (手機震動可選)
+            // 但無需額外處理
 
         })();
     </script>
