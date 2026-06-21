@@ -2,433 +2,526 @@
 <html lang="zh-HK">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>軟式曲棍球電子牌 - 聲控比分</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+    <title>軟式曲棍球 電子記分牌</title>
     <style>
         * {
             box-sizing: border-box;
-            user-select: none; /* 避免點擊時選取文字 */
-        }
-        body {
             margin: 0;
-            min-height: 100vh;
-            background: radial-gradient(circle at 20% 30%, #1a2a3a, #0b1219);
+            padding: 0;
+        }
+
+        body {
             font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+            background: linear-gradient(145deg, #0b1a2e 0%, #1a2f44 100%);
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 16px;
         }
+
         .scoreboard {
-            max-width: 800px;
+            max-width: 850px;
             width: 100%;
-            background: rgba(10, 20, 30, 0.75);
-            backdrop-filter: blur(4px);
-            border-radius: 80px 80px 60px 60px;
-            padding: 30px 20px 40px;
-            box-shadow: 0 30px 40px rgba(0,0,0,0.7), 0 0 0 2px #3c5a7a inset, 0 0 0 4px #1c2e40 inset;
-            border: 1px solid #6a8db0;
-            transition: all 0.1s;
+            background: #1e3a5f;
+            background: radial-gradient(circle at 20% 30%, #2a4b72, #0f2a44);
+            border-radius: 72px 72px 48px 48px;
+            padding: 32px 28px 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.7), 0 0 0 2px #6d8eb0 inset;
+            transition: all 0.2s;
+            border: 1px solid #b0cee8;
         }
-        h1 {
-            text-align: center;
-            color: #d0e4ff;
-            font-weight: 400;
-            letter-spacing: 6px;
-            text-shadow: 0 2px 0 #0a1a2a, 0 0 12px #3f7bb0;
-            margin: -8px 0 12px 0;
-            font-size: 1.6rem;
-            word-break: keep-all;
-        }
-        .teams {
+
+        /* 隊名 + 分數區域 */
+        .team-container {
             display: flex;
             flex-direction: row;
-            justify-content: space-evenly;
+            justify-content: space-between;
             align-items: stretch;
             gap: 12px;
-            margin: 12px 0 6px;
+            margin-bottom: 28px;
         }
-        .team {
+
+        .team-card {
+            background: #0f1f30;
+            background: linear-gradient(145deg, #142b3f, #0a1a29);
+            border-radius: 48px 48px 28px 28px;
+            padding: 20px 12px 24px;
             flex: 1;
-            background: #142433;
-            border-radius: 60px 60px 40px 40px;
-            padding: 14px 6px 18px;
-            box-shadow: inset 0 -8px 0 #0a1622, 0 10px 18px rgba(0,0,0,0.5);
-            border-bottom: 3px solid #3f7bb0;
-            transition: transform 0.1s;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .team-name {
-            color: #bdd6f0;
-            font-size: 1.8rem;
-            font-weight: 600;
-            letter-spacing: 2px;
-            text-shadow: 0 2px 0 #0d1b2b;
-            margin-bottom: 6px;
-        }
-        .score-container {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin: 6px 0 4px;
-        }
-        .score-btn {
-            background: #1d3147;
-            border: none;
-            border-radius: 40px;
-            color: #f0f9ff;
-            font-size: 3.2rem;
-            font-weight: 700;
-            width: 80px;
-            height: 80px;
-            line-height: 1;
-            box-shadow: 0 6px 0 #0b1727, 0 8px 16px rgba(0,0,0,0.6);
-            transition: all 0.04s linear;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-shadow: 0 2px 0 #0a1a2a;
-            touch-action: manipulation;
-            border: 1px solid #3b6a8f;
-        }
-        .score-btn:active {
-            transform: translateY(6px);
-            box-shadow: 0 1px 0 #0b1727, 0 6px 12px rgba(0,0,0,0.6);
-        }
-        .score-btn.minus {
-            background: #2f1f2a;
-            border-color: #7a4a5a;
-            color: #ffc9d9;
-            box-shadow: 0 6px 0 #1e121b, 0 8px 16px rgba(0,0,0,0.6);
-        }
-        .score-number {
-            font-size: 4.8rem;
-            font-weight: 700;
-            min-width: 80px;
+            box-shadow: inset 0 -6px 0 #3b5f7a, 0 8px 16px rgba(0,0,0,0.6);
+            border: 1px solid #4d7a9e;
             text-align: center;
-            color: #ffffff;
-            text-shadow: 0 0 20px #6aafee, 0 4px 0 #0e1f30;
-            letter-spacing: 2px;
-            background: #0c1a28;
-            padding: 0 8px;
-            border-radius: 30px;
-            line-height: 1.3;
-            border: 1px solid #3f74a0;
+            transition: 0.1s;
+            min-width: 120px;
         }
-        .vs-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 0 4px;
-            font-size: 1.2rem;
-            color: #8ab3d9;
-            font-weight: 300;
-        }
-        .vs-badge {
-            background: #1d3147;
-            border-radius: 40px;
-            padding: 6px 12px;
+
+        .team-name {
+            font-size: 1.9rem;
             font-weight: 700;
-            color: #c0daf5;
-            border: 1px solid #4b7a9f;
-            box-shadow: inset 0 0 8px #1f3f5a;
-            font-size: 1.2rem;
+            letter-spacing: 2px;
+            color: #f2f9ff;
+            text-shadow: 0 2px 4px #00000066;
+            background: #1f405b;
+            display: inline-block;
+            padding: 0 20px;
+            border-radius: 40px;
+            line-height: 1.4;
+            margin-bottom: 12px;
+            border: 1px solid #7ea6c9;
+            box-shadow: inset 0 1px 3px #b3d6f0;
         }
-        .control-bar {
+
+        .score-display {
+            font-size: 8rem;          /* 特大分數 */
+            font-weight: 800;
+            line-height: 1.1;
+            color: #f5fcff;
+            text-shadow: 0 6px 0 #0a1e2e, 0 12px 18px #00000099;
+            background: #0b1f2e;
+            border-radius: 60px;
+            padding: 6px 6px 0;
+            margin: 10px 0 16px;
+            letter-spacing: 6px;
+            border: 2px solid #6b93b5;
+            box-shadow: inset 0 -8px 0 #27445c;
+            font-variant-numeric: tabular-nums;
+            transition: 0.1s;
+        }
+
+        .score-display:active {
+            transform: scale(0.96);
+        }
+
+        .btn-group {
             display: flex;
             justify-content: center;
-            align-items: center;
-            gap: 18px;
-            margin-top: 28px;
+            gap: 20px;
+            margin-top: 10px;
             flex-wrap: wrap;
         }
-        .action-btn {
-            background: #1f334a;
+
+        .btn-score {
+            background: #2b5170;
             border: none;
-            border-radius: 100px;
-            padding: 14px 26px;
-            color: #ebf5ff;
-            font-size: 1.4rem;
-            font-weight: 500;
-            box-shadow: 0 6px 0 #0f1e2e, 0 8px 16px rgba(0,0,0,0.5);
-            transition: 0.04s linear;
+            border-radius: 60px;
+            padding: 14px 28px;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: white;
+            box-shadow: 0 6px 0 #12303f, 0 8px 14px #00000055;
+            transition: all 0.06s linear;
             cursor: pointer;
+            min-width: 100px;
+            border: 1px solid #90b8da;
+            text-shadow: 0 1px 2px black;
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            border: 1px solid #4d7a9e;
-            touch-action: manipulation;
+            justify-content: center;
+            flex: 1 1 auto;
+        }
+
+        .btn-score:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #0a1f2b;
+        }
+
+        .btn-score.plus {
+            background: #2d7a4a;
+            border-color: #87c7a2;
+        }
+
+        .btn-score.plus:active {
+            background: #1b5f36;
+        }
+
+        .btn-score.minus {
+            background: #a14343;
+            border-color: #e08787;
+        }
+
+        .btn-score.minus:active {
+            background: #7e2f2f;
+        }
+
+        /* 中間「VS」裝飾 */
+        .vs-divider {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #b3d6f0;
+            font-size: 2.5rem;
+            font-weight: 800;
+            text-shadow: 0 4px 0 #0c1f2e;
+            padding: 0 6px;
             letter-spacing: 2px;
+            min-width: 60px;
         }
-        .action-btn:active {
-            transform: translateY(6px);
-            box-shadow: 0 1px 0 #0f1e2e, 0 6px 12px rgba(0,0,0,0.5);
-        }
-        .action-btn.speak {
-            background: #2a4d5a;
-            border-color: #5d9bb0;
-            box-shadow: 0 6px 0 #1a3340, 0 8px 16px rgba(0,0,0,0.5);
-        }
-        .action-btn.reset {
-            background: #4a2f3a;
-            border-color: #8f5a6a;
-            box-shadow: 0 6px 0 #2f1d26, 0 8px 16px rgba(0,0,0,0.5);
-        }
-        .footer {
-            margin-top: 30px;
-            color: #5f7f9a;
-            text-align: center;
-            font-size: 0.9rem;
-            border-top: 1px solid #2b4a60;
-            padding-top: 16px;
-            letter-spacing: 1px;
-        }
-        @media (max-width: 600px) {
-            .scoreboard { padding: 20px 10px 30px; border-radius: 50px; }
-            .team-name { font-size: 1.4rem; }
-            .score-btn { width: 64px; height: 64px; font-size: 2.6rem; }
-            .score-number { font-size: 3.6rem; min-width: 60px; }
-            .vs-badge { font-size: 1rem; padding: 4px 10px; }
-            .action-btn { padding: 10px 18px; font-size: 1.0rem; }
-        }
-        @media (max-width: 420px) {
-            .score-btn { width: 54px; height: 54px; font-size: 2.2rem; }
-            .score-number { font-size: 2.8rem; min-width: 50px; }
-            .team-name { font-size: 1.2rem; }
-        }
-        /* 讀出狀態提示 */
-        .speech-indicator {
-            color: #b3d9f0;
-            background: #1a3349;
+
+        .vs-divider small {
+            font-size: 1.2rem;
+            background: #1f3c54;
+            padding: 4px 12px;
             border-radius: 40px;
-            padding: 6px 18px;
-            font-size: 0.9rem;
-            border: 1px solid #3d7a9a;
-            box-shadow: inset 0 0 10px #17334a;
-            display: inline-block;
+            border: 1px solid #6e96b9;
         }
-        .flex-row {
+
+        /* 聲控模式 + 重置 */
+        .control-bar {
             display: flex;
             flex-wrap: wrap;
-            justify-content: center;
             align-items: center;
-            gap: 12px;
+            justify-content: center;
+            gap: 20px 30px;
+            margin-top: 30px;
+            padding: 16px 12px;
+            background: #0f283d;
+            border-radius: 120px;
+            border: 1px solid #3d6b8a;
+            box-shadow: inset 0 2px 10px #040d16;
+        }
+
+        .voice-toggle {
+            background: #346d8f;
+            border: none;
+            border-radius: 60px;
+            padding: 12px 28px;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: white;
+            box-shadow: 0 5px 0 #10405a;
+            cursor: pointer;
+            transition: 0.08s linear;
+            border: 1px solid #79b0d4;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .voice-toggle:active {
+            transform: translateY(4px);
+            box-shadow: 0 1px 0 #10405a;
+        }
+
+        .voice-toggle.active {
+            background: #2b8f5e;
+            border-color: #9be0b8;
+            box-shadow: 0 5px 0 #1c5a3a;
+        }
+
+        .reset-btn {
+            background: #5d4d3b;
+            border: none;
+            border-radius: 60px;
+            padding: 12px 32px;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #f5f0e6;
+            box-shadow: 0 5px 0 #3d2f22;
+            cursor: pointer;
+            border: 1px solid #b39274;
+            transition: 0.08s linear;
+        }
+
+        .reset-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 1px 0 #3d2f22;
+        }
+
+        .voice-indicator {
+            color: #bfdef5;
+            font-size: 1.4rem;
+            background: #102b3d;
+            padding: 6px 22px;
+            border-radius: 40px;
+            border: 1px solid #4e7c9b;
+            font-weight: 500;
+        }
+
+        /* 響應式 */
+        @media (max-width: 700px) {
+            .team-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .vs-divider {
+                flex-direction: row;
+                padding: 8px 0;
+                font-size: 2rem;
+                min-width: unset;
+            }
+            .vs-divider small {
+                font-size: 1.2rem;
+                margin-left: 12px;
+            }
+            .score-display {
+                font-size: 6rem;
+            }
+            .btn-score {
+                font-size: 1.8rem;
+                padding: 12px 16px;
+                min-width: 80px;
+            }
+            .team-name {
+                font-size: 1.6rem;
+            }
+        }
+
+        @media (max-width: 450px) {
+            .score-display {
+                font-size: 4.5rem;
+                letter-spacing: 2px;
+            }
+            .btn-score {
+                font-size: 1.5rem;
+                padding: 10px 10px;
+                min-width: 70px;
+            }
+            .voice-toggle, .reset-btn {
+                font-size: 1.4rem;
+                padding: 10px 18px;
+            }
+        }
+
+        /* 輔助 */
+        .clickable {
+            cursor: pointer;
+            user-select: none;
         }
     </style>
 </head>
 <body>
-    <div class="scoreboard" role="main">
-        <h1>🏑 軟式曲棍球</h1>
-        <div class="teams">
-            <!-- 主隊 -->
-            <div class="team" id="teamA">
-                <div class="team-name">🟦 主隊</div>
-                <div class="score-container">
-                    <button class="score-btn minus" data-team="A" data-delta="-1" aria-label="主隊減1分">−</button>
-                    <div class="score-number" id="scoreA">0</div>
-                    <button class="score-btn" data-team="A" data-delta="1" aria-label="主隊加1分">+</button>
-                </div>
-            </div>
-            <!-- VS 分隔 -->
-            <div class="vs-section">
-                <div class="vs-badge">⚡ VS</div>
-                <div style="font-size:0.9rem; margin-top:4px; color:#759bbd;">比</div>
-            </div>
-            <!-- 客隊 -->
-            <div class="team" id="teamB">
-                <div class="team-name">🟥 客隊</div>
-                <div class="score-container">
-                    <button class="score-btn minus" data-team="B" data-delta="-1" aria-label="客隊減1分">−</button>
-                    <div class="score-number" id="scoreB">0</div>
-                    <button class="score-btn" data-team="B" data-delta="1" aria-label="客隊加1分">+</button>
-                </div>
+<div class="scoreboard">
+    <!-- 兩隊 -->
+    <div class="team-container">
+        <!-- 主隊 A -->
+        <div class="team-card" id="teamA">
+            <div class="team-name">🏒 主隊</div>
+            <div class="score-display" id="scoreA">0</div>
+            <div class="btn-group">
+                <button class="btn-score plus" data-team="A" data-delta="1">➕ 加</button>
+                <button class="btn-score minus" data-team="A" data-delta="-1">➖ 減</button>
             </div>
         </div>
 
-        <!-- 控制列 + 聲控模式 -->
-        <div class="control-bar">
-            <div class="flex-row">
-                <button class="action-btn speak" id="speakBtn" aria-label="讀出比分（聲控模式）">🔊 讀出比分</button>
-                <button class="action-btn reset" id="resetBtn" aria-label="重設比分">↺ 重設</button>
-            </div>
-            <div class="speech-indicator" id="speechStatus">🔈 點擊「讀出比分」</div>
+        <!-- VS 分隔 -->
+        <div class="vs-divider">
+            <span>⚡</span>
+            <small>VS</small>
         </div>
 
-        <!-- 額外說明：按分數加減，聲控讀出「比」 -->
-        <div class="footer">
-            <span>⚡ 直接點擊分數數字加減 &nbsp;·&nbsp; 語音讀出「<strong>X 比 Y</strong>」</span>
+        <!-- 客隊 B -->
+        <div class="team-card" id="teamB">
+            <div class="team-name">🏒 客隊</div>
+            <div class="score-display" id="scoreB">0</div>
+            <div class="btn-group">
+                <button class="btn-score plus" data-team="B" data-delta="1">➕ 加</button>
+                <button class="btn-score minus" data-team="B" data-delta="-1">➖ 減</button>
+            </div>
         </div>
     </div>
 
-    <script>
-        (function() {
-            "use strict";
+    <!-- 控制欄 : 聲控 + 重置 -->
+    <div class="control-bar">
+        <button class="voice-toggle" id="voiceToggleBtn">🔊 聲控</button>
+        <button class="reset-btn" id="resetBtn">⟳ 重置</button>
+        <span class="voice-indicator" id="voiceStatus">⏺ 關閉</span>
+    </div>
+</div>
 
-            // DOM 元素
-            const scoreElA = document.getElementById('scoreA');
-            const scoreElB = document.getElementById('scoreB');
-            const speechStatus = document.getElementById('speechStatus');
+<script>
+    (function() {
+        // --- DOM refs ---
+        const scoreAEl = document.getElementById('scoreA');
+        const scoreBEl = document.getElementById('scoreB');
+        const voiceToggleBtn = document.getElementById('voiceToggleBtn');
+        const voiceStatus = document.getElementById('voiceStatus');
+        const resetBtn = document.getElementById('resetBtn');
 
-            // 分數狀態 (內部)
-            let scoreA = 0;
-            let scoreB = 0;
+        // --- state ---
+        let scoreA = 0;
+        let scoreB = 0;
+        let voiceEnabled = false;      // 預設關閉聲控
 
-            // 語音合成支援
-            const synth = window.speechSynthesis;
-            let utterance = null;
-            let speechSupported = ('speechSynthesis' in window);
+        // --- 語音合成輔助 (讀出「X比Y」) ---
+        function speakScore(team, newScore, opponentScore) {
+            if (!voiceEnabled) return;
 
-            // 更新顯示
-            function updateDisplay() {
-                scoreElA.textContent = scoreA;
-                scoreElB.textContent = scoreB;
+            // 判定邊隊，讀出「主隊/客隊」＋分數＋「比」＋對手分數
+            let teamName = (team === 'A') ? '主隊' : '客隊';
+            // 組合語句: e.g. "主隊 7 比 3"
+            const utteranceText = `${teamName} ${newScore} 比 ${opponentScore}`;
+
+            if (window.speechSynthesis) {
+                // 取消任何正在播放的語音，避免疊加混亂
+                window.speechSynthesis.cancel();
+
+                const msg = new SpeechSynthesisUtterance(utteranceText);
+                msg.lang = 'zh-HK';          // 粵語 / 中文
+                msg.rate = 0.95;
+                msg.pitch = 1.0;
+                msg.volume = 1;
+                // 選用粵語/中文語音 (如果瀏覽器支援)
+                const voices = window.speechSynthesis.getVoices();
+                // 嘗試找 zh-HK / 中文 語音
+                const preferredVoice = voices.find(v => v.lang.startsWith('zh'));
+                if (preferredVoice) msg.voice = preferredVoice;
+                window.speechSynthesis.speak(msg);
+            } else {
+                console.warn('此瀏覽器不支援 Speech Synthesis');
             }
+        }
 
-            // 核心：加分/減分 (delta: +1 或 -1)
-            function adjustScore(team, delta) {
-                if (team === 'A') {
-                    const newVal = scoreA + delta;
-                    if (newVal < 0) {
-                        // 不低於0 (但可以保持0)
-                        if (scoreA === 0) return;
-                        scoreA = 0;
-                    } else {
-                        scoreA = newVal;
-                    }
-                } else if (team === 'B') {
-                    const newVal = scoreB + delta;
-                    if (newVal < 0) {
-                        if (scoreB === 0) return;
-                        scoreB = 0;
-                    } else {
-                        scoreB = newVal;
-                    }
-                } else {
+        // --- 更新分數顯示 (並觸發語音) ---
+        function updateScore(team, delta) {
+            let newScore, opponentScore;
+            if (team === 'A') {
+                // 防止分數低於 0
+                if (scoreA + delta < 0) {
+                    // 可選震動回饋或忽略
                     return;
                 }
-                updateDisplay();
-                // 每次分數變動後，自動讀出比分 (聲控模式)
-                speakScore('auto');
-            }
-
-            // 讀出比分 : 讀出「X 比 Y」 (例如 7 比 3)
-            function speakScore(trigger = 'manual') {
-                if (!speechSupported) {
-                    speechStatus.textContent = '⚠️ 瀏覽器不支援語音';
+                scoreA = scoreA + delta;
+                scoreAEl.textContent = scoreA;
+                newScore = scoreA;
+                opponentScore = scoreB;
+            } else { // team B
+                if (scoreB + delta < 0) {
                     return;
                 }
-                // 取消任何正在進行的語音
-                if (synth.speaking) {
-                    synth.cancel();
-                }
-
-                const text = `${scoreA} 比 ${scoreB}`;
-                utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = 'zh-HK';  // 粵語/中文
-                utterance.rate = 0.9;
-                utterance.pitch = 1.1;
-                utterance.volume = 1;
-
-                // 狀態提示
-                if (trigger === 'manual') {
-                    speechStatus.textContent = `🔊 讀出: 「${text}」`;
-                } else {
-                    speechStatus.textContent = `🔊 自動讀出: 「${text}」`;
-                }
-
-                utterance.onstart = function() {
-                    // 可選: 增加視覺回饋
-                };
-                utterance.onend = function() {
-                    speechStatus.textContent = `✅ 已讀出: 「${text}」`;
-                };
-                utterance.onerror = function(e) {
-                    speechStatus.textContent = `❌ 語音錯誤: ${e.error || '未知'}`;
-                };
-
-                synth.speak(utterance);
+                scoreB = scoreB + delta;
+                scoreBEl.textContent = scoreB;
+                newScore = scoreB;
+                opponentScore = scoreA;
             }
 
-            // 重置分數
-            function resetScore() {
-                if (synth && synth.speaking) synth.cancel();
-                scoreA = 0;
-                scoreB = 0;
-                updateDisplay();
-                speechStatus.textContent = '🔄 分數已重設';
-                // 重設後讀出 0 比 0
-                speakScore('auto');
-            }
+            // 語音讀出: 讀出該隊分數變化 (讀出「隊名 + 分數 + 比 + 對手分數」)
+            speakScore(team, newScore, opponentScore);
+        }
 
-            // ---------- 事件綁定 (按鈕) ----------
-            // 使用事件代理 (捕獲所有 .score-btn)
-            document.querySelector('.teams').addEventListener('click', function(e) {
-                const btn = e.target.closest('.score-btn');
-                if (!btn) return;
-                const team = btn.getAttribute('data-team');
-                const delta = parseInt(btn.getAttribute('data-delta'), 10);
-                if (team && !isNaN(delta)) {
-                    e.stopPropagation();
-                    adjustScore(team, delta);
+        // --- 重置分數 ---
+        function resetScores() {
+            // 如果啟用語音，重置時也讀出「0比0」
+            const oldA = scoreA;
+            const oldB = scoreB;
+
+            scoreA = 0;
+            scoreB = 0;
+            scoreAEl.textContent = '0';
+            scoreBEl.textContent = '0';
+
+            if (voiceEnabled) {
+                // 重置時讀出「0比0」，但用哪一隊名義？ 我們讀「比賽重置 0 比 0」
+                if (window.speechSynthesis) {
+                    window.speechSynthesis.cancel();
+                    const msg = new SpeechSynthesisUtterance('比分重置 零 比 零');
+                    msg.lang = 'zh-HK';
+                    const voices = window.speechSynthesis.getVoices();
+                    const preferred = voices.find(v => v.lang.startsWith('zh'));
+                    if (preferred) msg.voice = preferred;
+                    window.speechSynthesis.speak(msg);
                 }
-            });
-
-            // 讀出比分按鈕 (手動觸發)
-            document.getElementById('speakBtn').addEventListener('click', function(e) {
-                e.stopPropagation();
-                speakScore('manual');
-            });
-
-            // 重設按鈕
-            document.getElementById('resetBtn').addEventListener('click', function(e) {
-                e.stopPropagation();
-                resetScore();
-            });
-
-            // 鍵盤快捷鍵 (加分/減分) : 可選，但保留使用體驗
-            // 1: 主隊+1, 2: 主隊-1, 3: 客隊+1, 4: 客隊-1 (只做為輔助)
-            document.addEventListener('keydown', function(e) {
-                const key = e.key;
-                // 避免干擾輸入框等
-                if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-                // 數字鍵盤或主鍵盤數字
-                if (key === '1') { adjustScore('A', 1); e.preventDefault(); }
-                else if (key === '2') { adjustScore('A', -1); e.preventDefault(); }
-                else if (key === '3') { adjustScore('B', 1); e.preventDefault(); }
-                else if (key === '4') { adjustScore('B', -1); e.preventDefault(); }
-                else if (key === '0' || key === 'r') { resetScore(); e.preventDefault(); }
-                else if (key === 's' || key === 'S') { speakScore('manual'); e.preventDefault(); }
-            });
-
-            // 初始化顯示
-            updateDisplay();
-
-            // 初次載入時讀出一次比分 (讓用家知道功能)
-            window.addEventListener('load', function() {
-                setTimeout(() => {
-                    if (speechSupported) {
-                        speakScore('auto');
-                    } else {
-                        speechStatus.textContent = '⚠️ 語音不支援，請使用 Chrome / Edge / Safari';
-                    }
-                }, 500);
-            });
-
-            // 若語音支援但不發聲，提示
-            if (!speechSupported) {
-                speechStatus.textContent = '⚠️ 此瀏覽器不支援語音合成';
             }
+        }
 
-            // 增加額外觸覺回饋 (手機震動可選)
-            // 但無需額外處理
+        // --- 切換聲控模式 ---
+        function toggleVoice() {
+            voiceEnabled = !voiceEnabled;
+            if (voiceEnabled) {
+                voiceToggleBtn.classList.add('active');
+                voiceStatus.textContent = '🎤 聲控開';
+                // 可讀出提示 (但唔強制)
+                if (window.speechSynthesis) {
+                    window.speechSynthesis.cancel();
+                    const msg = new SpeechSynthesisUtterance('聲控模式已開啟');
+                    msg.lang = 'zh-HK';
+                    const voices = window.speechSynthesis.getVoices();
+                    const preferred = voices.find(v => v.lang.startsWith('zh'));
+                    if (preferred) msg.voice = preferred;
+                    window.speechSynthesis.speak(msg);
+                }
+            } else {
+                voiceToggleBtn.classList.remove('active');
+                voiceStatus.textContent = '⏺ 關閉';
+                if (window.speechSynthesis) {
+                    window.speechSynthesis.cancel();
+                }
+            }
+        }
 
-        })();
-    </script>
+        // --- 事件綁定 (按鈕加分/減分) ---
+        function handleScoreClick(e) {
+            const btn = e.currentTarget;
+            const team = btn.dataset.team;    // 'A' 或 'B'
+            const delta = parseInt(btn.dataset.delta, 10);
+            if (isNaN(delta)) return;
+            updateScore(team, delta);
+        }
+
+        // --- 初始化語音 (preload voices) ---
+        function preloadVoices() {
+            if (window.speechSynthesis) {
+                // 觸發載入語音清單
+                window.speechSynthesis.getVoices();
+                // 部分瀏覽器需要事件
+                window.speechSynthesis.onvoiceschanged = () => {
+                    window.speechSynthesis.getVoices();
+                };
+            }
+        }
+
+        // --- 附加: 點擊分數也可加1 (直覺操作) 但已用按鈕, 但我們為分數顯示加上點擊加分 (直接加1) ---
+        function handleScoreDisplayClick(e) {
+            // 判斷點擊的是 A 或 B 的分數顯示
+            const el = e.currentTarget;
+            if (el.id === 'scoreA') {
+                updateScore('A', 1);
+            } else if (el.id === 'scoreB') {
+                updateScore('B', 1);
+            }
+        }
+
+        // --- 註冊所有按鈕 ---
+        function init() {
+            // 所有 .btn-score
+            const scoreBtns = document.querySelectorAll('.btn-score');
+            scoreBtns.forEach(btn => {
+                btn.addEventListener('click', handleScoreClick);
+            });
+
+            // 分數顯示點擊加1 (直接點分數)
+            scoreAEl.addEventListener('click', handleScoreDisplayClick);
+            scoreBEl.addEventListener('click', handleScoreDisplayClick);
+
+            // 聲控按鈕
+            voiceToggleBtn.addEventListener('click', toggleVoice);
+
+            // 重置按鈕
+            resetBtn.addEventListener('click', resetScores);
+
+            // 預載語音
+            preloadVoices();
+
+            // 初始狀態: 聲控關閉
+            voiceEnabled = false;
+            voiceToggleBtn.classList.remove('active');
+            voiceStatus.textContent = '⏺ 關閉';
+
+            // 額外: 點擊隊名或分數區塊不觸發其他
+        }
+
+        // 啟動
+        init();
+
+        // 由於語音清單可能非同步，延遲再試一次
+        setTimeout(() => {
+            if (window.speechSynthesis) {
+                window.speechSynthesis.getVoices();
+            }
+        }, 300);
+    })();
+</script>
+
 </body>
 </html>
